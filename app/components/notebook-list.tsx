@@ -3,14 +3,17 @@
 import { useState } from 'react';
 import { Notebook } from './notebook';
 import { IconPlus } from '@tabler/icons-react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 const INITIAL_NOTEBOOKS = [
-  { name: 'Projects' },
-  { name: 'Learnings' },
-  { name: 'Something else' },
+  { id: 1, name: 'Projects' },
+  { id: 2, name: 'Learnings' },
+  { id: 3, name: 'Something else' },
 ];
 
 export default function NotebookList() {
+  const router = useRouter();
   const [notebooks, setNotebooks] = useState(INITIAL_NOTEBOOKS);
   const [showModal, setShowModal] = useState(false);
   const [name, setName] = useState('');
@@ -32,7 +35,9 @@ export default function NotebookList() {
         setIsLoading(false);
         return;
       }
-      setNotebooks((prev) => [...prev, { name }]);
+      const newId =
+        notebooks.length > 0 ? Math.max(...notebooks.map((n) => n.id)) + 1 : 1;
+      setNotebooks((prev) => [...prev, { id: newId, name }]);
       setName('');
       setIsLoading(false);
       setShowModal(false);
@@ -62,12 +67,14 @@ export default function NotebookList() {
       </div>
       <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full'>
         {notebooks.map((notebook, idx) => (
-          <Notebook
-            key={notebook.name}
-            name={notebook.name}
-            onDelete={() => handleDeleteNotebook(idx)}
-            onUpdate={(newName) => handleUpdateNotebook(idx, newName)}
-          />
+          <Link key={notebook.id} href={`/home/${notebook.id}`}>
+            <Notebook
+              id={notebook.id}
+              name={notebook.name}
+              onDelete={() => handleDeleteNotebook(idx)}
+              onUpdate={(newName) => handleUpdateNotebook(idx, newName)}
+            />
+          </Link>
         ))}
       </div>
       {showModal && (

@@ -4,12 +4,20 @@ import { useState } from 'react';
 import { IconTrash, IconPencil } from '@tabler/icons-react';
 
 interface NotebookProps {
+  id: number;
   name: string;
   onDelete: () => Promise<void> | void;
   onUpdate?: (newName: string) => Promise<void> | void;
+  onClick?: () => void;
 }
 
-export function Notebook({ name, onDelete, onUpdate }: NotebookProps) {
+export function Notebook({
+  id,
+  name,
+  onDelete,
+  onUpdate,
+  onClick,
+}: NotebookProps) {
   const [showDelete, setShowDelete] = useState(false);
   const [confirm, setConfirm] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
@@ -56,6 +64,9 @@ export function Notebook({ name, onDelete, onUpdate }: NotebookProps) {
       onMouseLeave={() => {
         setShowDelete(false);
         setConfirm(false);
+      }}
+      onClick={() => {
+        if (!showDelete && !showEdit && onClick) onClick();
       }}
     >
       <div className='flex-1 flex items-center justify-center text-2xl font-bold text-blue-700 text-center mb-4'>
