@@ -12,12 +12,23 @@ import {
   IconChevronLeft,
 } from '@tabler/icons-react';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { logout, getUser } from '@/lib/auth';
+import { User } from '@/lib/types';
 
 export default function Navbar() {
   const [showModal, setShowModal] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const user = await getUser();
+      setUser(user);
+    };
+    fetchUser();
+  }, []);
 
   function handleToggleTheme() {
     setDarkMode((v) => !v);
@@ -53,9 +64,10 @@ export default function Navbar() {
           </button>
           {showModal && !showSettings && (
             <div className='absolute left-1/2 top-14 -translate-x-1/2 sm:left-0 sm:top-14 sm:translate-x-0 w-[90vw] max-w-xs sm:w-56 sm:max-w-none bg-white rounded-xl shadow-xl border border-blue-100 p-4 z-50 flex flex-col gap-3 min-w-[200px]'>
-              <div className='flex items-center gap-3 text-blue-700 font-medium'>
-                <IconMail size={20} />
-                johndoe@email.com
+              <div className='flex items-center gap-3 text-blue-700 max-w-full font-medium'>
+                <span className='truncate'>
+                  {user?.email_address.length > 0 ? user.email_address : 'User'}
+                </span>
               </div>
               <button
                 className='flex items-center gap-3 text-gray-700 cursor-pointer hover:text-blue-700 transition-colors w-full text-left'
@@ -67,7 +79,7 @@ export default function Navbar() {
               </button>
               <div className='flex items-center gap-3 text-red-500 cursor-pointer hover:text-red-700 transition-colors'>
                 <IconLogout size={20} />
-                Sign out
+                <button onClick={logout}>Sign out</button>
               </div>
             </div>
           )}

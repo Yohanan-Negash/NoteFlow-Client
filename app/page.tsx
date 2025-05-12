@@ -1,8 +1,9 @@
 'use client';
 
-import { Button } from './components/ui/button';
-import { Input } from './components/ui/input';
 import { useState } from 'react';
+import { Button } from './components/ui/button';
+import { LoginForm } from './components/auth/login-form';
+import { RegisterForm } from './components/auth/register-form';
 
 export default function Home() {
   const [showSignIn, setShowSignIn] = useState(false);
@@ -43,14 +44,8 @@ export default function Home() {
         )}
 
         {showSignIn && (
-          <form className='space-y-4' onSubmit={(e) => e.preventDefault()}>
-            <div className='space-y-2'>
-              <Input type='email' placeholder='Email' />
-              <Input type='password' placeholder='Password' />
-            </div>
-            <Button className='w-full' size='lg' type='submit'>
-              Sign in
-            </Button>
+          <div className='space-y-4'>
+            <LoginForm />
             <Button
               variant='ghost'
               className='w-full text-blue-400'
@@ -58,28 +53,20 @@ export default function Home() {
             >
               Back
             </Button>
-          </form>
+          </div>
         )}
 
         {showSignUp && (
-          <form className='space-y-4' onSubmit={(e) => e.preventDefault()}>
-            <div className='space-y-2'>
-              <Input type='text' placeholder='Name' />
-              <Input type='email' placeholder='Email' />
-              <Input type='password' placeholder='Password' />
-              <Input type='password' placeholder='Confirm Password' />
-            </div>
-            <Button className='w-full' size='lg' type='submit'>
-              Create account
-            </Button>
+          <div className='space-y-4'>
+            <RegisterForm />
             <Button
               variant='ghost'
-              className='w-full'
+              className='w-full text-blue-400'
               onClick={() => setShowSignUp(false)}
             >
               Back
             </Button>
-          </form>
+          </div>
         )}
 
         {/* <div className='mt-8 text-center text-sm text-gray-500'>
