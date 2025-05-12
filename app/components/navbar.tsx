@@ -13,7 +13,7 @@ import {
 } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { logout, getUser } from '@/lib/auth';
+import { logout, getUser } from '@/lib/actions/auth';
 import { User } from '@/lib/types';
 
 export default function Navbar() {

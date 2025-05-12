@@ -4,7 +4,7 @@ import { useActionState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { login } from '@/lib/auth';
+import { login } from '@/lib/actions/auth';
 import { Button } from '@/app/components/ui/button';
 import { Input } from '@/app/components/ui/input';
 
