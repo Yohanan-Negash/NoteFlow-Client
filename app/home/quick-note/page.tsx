@@ -1,11 +1,67 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { IconPlus } from '@tabler/icons-react';
+import { getQuickNotes, createQuickNote } from '@/lib/actions/quicknote';
+import { QuickNote } from '@/lib/types';
+import { LoadingSpinner } from '@/app/components/ui/loading-spinner';
 
-interface QuickNote {
-  content: string;
-  createdAt: number;
+function TimeRemaining({ expiresAt }: { expiresAt: string }) {
+  const [timeLeft, setTimeLeft] = useState<string>('');
+
+  useEffect(() => {
+    function updateTimeLeft() {
+      const now = new Date();
+      const expiry = new Date(expiresAt);
+      const diffMs = expiry.getTime() - now.getTime();
+
+      if (diffMs <= 0) {
+        setTimeLeft('Expired');
+        return;
+      }
+
+      const hours = Math.floor(diffMs / (1000 * 60 * 60));
+      const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+
+      setTimeLeft(`${hours}h ${minutes}m remaining`);
+    }
+
+    updateTimeLeft();
+    const interval = setInterval(updateTimeLeft, 60000); // Update every minute
+
+    return () => clearInterval(interval);
+  }, [expiresAt]);
+
+  return <span className='font-medium text-amber-600'>{timeLeft}</span>;
+}
+
+function QuickNoteList({ notes }: { notes: QuickNote[] }) {
+  if (notes.length === 0) {
+    return (
+      <div className='flex flex-col items-center justify-center py-24 text-gray-400'>
+        <span className='text-lg mb-2'>No quick notes yet</span>
+        <span className='text-sm'>Create a quick note to get started!</span>
+      </div>
+    );
+  }
+
+  return (
+    <div className='flex flex-col gap-6'>
+      {notes.map((note, idx) => (
+        <div
+          key={idx}
+          className='border border-blue-100 rounded-xl bg-white shadow-sm p-6 flex flex-col gap-2'
+        >
+          <div className='whitespace-pre-wrap text-gray-800 text-base'>
+            {note.content}
+          </div>
+          <div className='text-xs text-gray-400 mt-2 flex justify-end'>
+            <TimeRemaining expiresAt={note.expires_at} />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
 }
 
 export default function QuickNotePage() {
@@ -14,8 +70,9 @@ export default function QuickNotePage() {
   const [content, setContent] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [isNotesLoading, setIsNotesLoading] = useState(true);
 
-  function handleCreateNote(e: React.FormEvent) {
+  async function handleCreateNote(e: React.FormEvent) {
     e.preventDefault();
     setError('');
     if (!content.trim()) {
@@ -23,23 +80,44 @@ export default function QuickNotePage() {
       return;
     }
     setIsLoading(true);
-    setTimeout(() => {
-      setNotes((prev) => [{ content, createdAt: Date.now() }, ...prev]);
-      setContent('');
+    try {
+      const newNote = await createQuickNote(content);
+      if (newNote.error) {
+        setError(newNote.error);
+      } else {
+        setNotes((prev) => [newNote, ...prev]);
+        setContent('');
+        setShowModal(false);
+      }
+    } catch (err) {
+      setError('Failed to create note');
+    } finally {
       setIsLoading(false);
-      setShowModal(false);
-    }, 800);
+    }
   }
 
-  function formatTime(ts: number) {
-    const date = new Date(ts);
-    return date.toLocaleString();
-  }
+  useEffect(() => {
+    const fetchNotes = async () => {
+      setIsNotesLoading(true);
+      try {
+        const fetchedNotes = await getQuickNotes();
+        if (Array.isArray(fetchedNotes)) {
+          setNotes(fetchedNotes);
+        }
+      } catch (err) {
+        console.error('Failed to fetch notes:', err);
+      } finally {
+        setIsNotesLoading(false);
+      }
+    };
+
+    fetchNotes();
+  }, []);
 
   return (
     <>
-      <div className='flex justify-between items-center mb-8'>
-        <h2 className='text-2xl font-semibold text-blue-700'>Quick Note</h2>
+      <div className='flex justify-between items-center mb-4'>
+        <h2 className='text-2xl font-semibold text-blue-700'>Quick Notes</h2>
         <button
           className='flex items-center gap-2 rounded-full border border-blue-200 bg-white text-blue-700 font-semibold px-5 py-2 shadow-sm hover:bg-blue-50 hover:text-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-200'
           onClick={() => setShowModal(true)}
@@ -48,27 +126,13 @@ export default function QuickNotePage() {
           New Quick Note
         </button>
       </div>
-      {notes.length === 0 && (
-        <div className='flex flex-col items-center justify-center py-24 text-gray-400'>
-          <span className='text-lg mb-2'>No quick notes yet</span>
-          <span className='text-sm'>Create a quick note to get started!</span>
-        </div>
-      )}
-      <div className='flex flex-col gap-6'>
-        {notes.map((note, idx) => (
-          <div
-            key={idx}
-            className='border border-blue-100 rounded-xl bg-white shadow-sm p-6 flex flex-col gap-2'
-          >
-            <div className='whitespace-pre-wrap text-gray-800 text-base'>
-              {note.content}
-            </div>
-            <div className='text-xs text-gray-400 mt-2'>
-              Created: {formatTime(note.createdAt)} (expires in 24h)
-            </div>
-          </div>
-        ))}
-      </div>
+
+      <p className='text-sm text-gray-500 mb-6'>
+        Quick notes are automatically deleted after 24 hours.
+      </p>
+
+      {isNotesLoading ? <LoadingSpinner /> : <QuickNoteList notes={notes} />}
+
       {showModal && (
         <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/30'>
           <div className='bg-white rounded-xl shadow-xl p-8 w-full max-w-lg mx-4'>

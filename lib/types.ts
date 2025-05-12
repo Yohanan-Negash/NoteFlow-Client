@@ -31,3 +31,13 @@ export interface ApiResponse<T> {
   data?: T;
   error?: string | string[];
 }
+
+export interface QuickNote {
+  id: number;
+  title: string | null;
+  content: string;
+  expires_at: string;
+  user_id: number;
+  created_at: string;
+  updated_at: string;
+}
