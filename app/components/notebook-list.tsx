@@ -1,26 +1,47 @@
 'use client';
 
-import { useState } from 'react';
-import { Notebook } from './notebook';
+import { useState, useEffect } from 'react';
+import { Notebook as NotebookComponent } from './notebook';
 import { IconPlus } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-
-const INITIAL_NOTEBOOKS = [
-  { id: 1, name: 'Projects' },
-  { id: 2, name: 'Learnings' },
-  { id: 3, name: 'Something else' },
-];
+import {
+  getNotebooks,
+  createNotebook,
+  deleteNotebook,
+  updateNotebook,
+} from '@/lib/actions/notebook';
+import { Notebook } from '@/lib/types';
+import { LoadingSpinner } from '@/app/components/ui/loading-spinner';
 
 export default function NotebookList() {
   const router = useRouter();
-  const [notebooks, setNotebooks] = useState(INITIAL_NOTEBOOKS);
+  const [notebooks, setNotebooks] = useState<Notebook[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [name, setName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isNotebooksLoading, setIsNotebooksLoading] = useState(true);
   const [error, setError] = useState('');
 
-  function handleCreateNotebook(e: React.FormEvent) {
+  useEffect(() => {
+    const fetchNotebooks = async () => {
+      setIsNotebooksLoading(true);
+      try {
+        const fetchedNotebooks = await getNotebooks();
+        if (Array.isArray(fetchedNotebooks)) {
+          setNotebooks(fetchedNotebooks);
+        }
+      } catch (err) {
+        console.error('Failed to fetch notebooks:', err);
+      } finally {
+        setIsNotebooksLoading(false);
+      }
+    };
+
+    fetchNotebooks();
+  }, []);
+
+  async function handleCreateNotebook(e: React.FormEvent) {
     e.preventDefault();
     setError('');
     if (!name.trim()) {
@@ -28,30 +49,51 @@ export default function NotebookList() {
       return;
     }
     setIsLoading(true);
-    setTimeout(() => {
-      // Simulate API call
-      if (name.toLowerCase() === 'error') {
-        setError('Something went wrong');
-        setIsLoading(false);
-        return;
+    try {
+      const newNotebook = await createNotebook(name);
+      if (newNotebook) {
+        setNotebooks((prev) => [...prev, newNotebook]);
+        setName('');
+        setShowModal(false);
+      } else {
+        setError('Failed to create notebook');
       }
-      const newId =
-        notebooks.length > 0 ? Math.max(...notebooks.map((n) => n.id)) + 1 : 1;
-      setNotebooks((prev) => [...prev, { id: newId, name }]);
-      setName('');
+    } catch (err) {
+      setError('An error occurred');
+      console.error(err);
+    } finally {
       setIsLoading(false);
-      setShowModal(false);
-    }, 1200);
+    }
   }
 
-  function handleDeleteNotebook(idx: number) {
-    setNotebooks((prev) => prev.filter((_, i) => i !== idx));
+  async function handleDeleteNotebook(id: string) {
+    try {
+      const success = await deleteNotebook(id);
+      if (success) {
+        setNotebooks((prev) =>
+          prev.filter((notebook) => notebook.id.toString() !== id)
+        );
+      }
+    } catch (err) {
+      console.error('Error deleting notebook:', err);
+    }
   }
 
-  function handleUpdateNotebook(idx: number, newName: string) {
-    setNotebooks((prev) =>
-      prev.map((n, i) => (i === idx ? { ...n, name: newName } : n))
-    );
+  async function handleUpdateNotebook(id: string, newName: string) {
+    try {
+      const updatedNotebook = await updateNotebook(id, newName);
+      if (updatedNotebook) {
+        setNotebooks((prev) =>
+          prev.map((notebook) =>
+            notebook.id.toString() === id
+              ? { ...notebook, name: newName }
+              : notebook
+          )
+        );
+      }
+    } catch (err) {
+      console.error('Error updating notebook:', err);
+    }
   }
 
   return (
@@ -65,18 +107,36 @@ export default function NotebookList() {
           Create Notebook
         </button>
       </div>
-      <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full'>
-        {notebooks.map((notebook, idx) => (
-          <Link key={notebook.id} href={`/home/${notebook.id}`}>
-            <Notebook
-              id={notebook.id}
-              name={notebook.name}
-              onDelete={() => handleDeleteNotebook(idx)}
-              onUpdate={(newName) => handleUpdateNotebook(idx, newName)}
-            />
-          </Link>
-        ))}
-      </div>
+
+      {isNotebooksLoading ? (
+        <LoadingSpinner />
+      ) : (
+        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full'>
+          {notebooks.length === 0 ? (
+            <div className='col-span-full flex flex-col items-center justify-center py-24 text-gray-400'>
+              <span className='text-lg mb-2'>No notebooks yet</span>
+              <span className='text-sm'>Create a notebook to get started!</span>
+            </div>
+          ) : (
+            notebooks.map((notebook) => (
+              <div
+                key={notebook.id}
+                onClick={() => router.push(`/home/${notebook.id}`)}
+              >
+                <NotebookComponent
+                  id={notebook.id}
+                  name={notebook.name}
+                  onDelete={() => handleDeleteNotebook(notebook.id.toString())}
+                  onUpdate={(newName) =>
+                    handleUpdateNotebook(notebook.id.toString(), newName)
+                  }
+                />
+              </div>
+            ))
+          )}
+        </div>
+      )}
+
       {showModal && (
         <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/30'>
           <div className='bg-white rounded-xl shadow-xl p-8 w-full max-w-sm mx-4'>
