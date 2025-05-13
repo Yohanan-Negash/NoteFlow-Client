@@ -1,57 +1,87 @@
+'use client';
+
+import React, { useState, useEffect } from 'react';
 import { getNotebook } from '@/lib/actions/notebook';
 import { getNotes } from '@/lib/actions/notes';
-import { notFound } from 'next/navigation';
+import { useParams, notFound, useRouter } from 'next/navigation';
 import NoteList from './note-list';
 import { CreateNoteButton } from './create-note-button';
-import { Suspense } from 'react';
 import { LoadingSpinner } from '@/app/components/ui/loading-spinner';
-import { cache } from 'react';
+import { Note } from '@/lib/types';
 
-interface NotebookPageProps {
-  params: Promise<{ id: string }>;
-}
+export default function NotebookPage() {
+  const router = useRouter();
+  const params = useParams();
+  const id = params.id as string;
 
-// Cache notebook data fetching to avoid duplicate requests
-const getNotebookData = cache(async (id: string) => {
-  const notebook = await getNotebook(id);
-  if (!notebook) return null;
-  return notebook;
-});
+  const [notebook, setNotebook] = useState<{ id: string; name: string } | null>(
+    null
+  );
+  const [notes, setNotes] = useState<Note[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-// Cache notes data fetching
-const getNotesData = cache(async (id: string) => {
-  return await getNotes(id);
-});
+  useEffect(() => {
+    if (!id) {
+      router.push('/home');
+      return;
+    }
 
-export default async function NotebookPage({ params }: NotebookPageProps) {
-  // Await params before accessing properties
-  const resolvedParams = await params;
-  const id = resolvedParams.id;
+    async function fetchData() {
+      setIsLoading(true);
+      setError(null);
 
-  if (!id) {
-    notFound();
+      try {
+        const notebookData = await getNotebook(id);
+
+        if (!notebookData) {
+          router.push('/home');
+          return;
+        }
+
+        setNotebook(notebookData);
+
+        const notesData = await getNotes(id);
+        setNotes(notesData || []);
+      } catch (err) {
+        console.error('Error fetching notebook data:', err);
+        setError('Failed to load notebook');
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchData();
+  }, [id, router]);
+
+  const handleNoteCreated = (note: Note) => {
+    setNotes((prevNotes) => [note, ...prevNotes]);
+  };
+
+  if (error) {
+    return <div className='p-8 text-center text-red-500'>{error}</div>;
   }
 
-  // Fetch notebook data
-  const notebook = await getNotebookData(id);
+  if (isLoading) {
+    return (
+      <div className='flex items-center justify-center h-96'>
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
   if (!notebook) {
-    notFound();
+    return null;
   }
-
-  // Fetch notes data
-  const notes = await getNotesData(id);
 
   return (
     <div className='max-w-7xl mx-auto py-10 px-4'>
       <div className='flex justify-between items-center mb-8'>
         <h1 className='text-2xl font-bold text-blue-700'>{notebook.name}</h1>
-        <CreateNoteButton notebookId={id} />
+        <CreateNoteButton notebookId={id} onNoteCreated={handleNoteCreated} />
       </div>
 
-      <Suspense fallback={<LoadingSpinner />}>
-        <NoteList initialNotes={notes || []} notebookId={id} />
-      </Suspense>
+      <NoteList notes={notes} setNotes={setNotes} notebookId={id} />
     </div>
   );
 }

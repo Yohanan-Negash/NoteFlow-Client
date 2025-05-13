@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useState, useTransition, Dispatch, SetStateAction } from 'react';
 import { Note } from '@/lib/types';
 import { deleteNote, updateNote } from '@/lib/actions/notes';
 import { NoteList as NoteListComponent } from '@/app/components/notelist';
@@ -8,12 +8,18 @@ import { NoteEditor } from '@/app/components/note-editor';
 import { useRouter } from 'next/navigation';
 
 interface NoteListProps {
-  initialNotes: Note[];
+  notes: Note[];
+  setNotes: Dispatch<SetStateAction<Note[]>>;
   notebookId: string;
+  initialNotes?: Note[];
 }
 
-export default function NoteList({ initialNotes, notebookId }: NoteListProps) {
-  const [notes, setNotes] = useState<Note[]>(initialNotes);
+export default function NoteList({
+  notes,
+  setNotes,
+  notebookId,
+  initialNotes = [],
+}: NoteListProps) {
   const [editingNote, setEditingNote] = useState<Note | null>(null);
   const [error, setError] = useState('');
   const router = useRouter();
@@ -27,11 +33,6 @@ export default function NoteList({ initialNotes, notebookId }: NoteListProps) {
       if (success) {
         // Optimistically update the UI
         setNotes((prev) => prev.filter((note) => note.id !== id));
-
-        // Then refresh the data
-        startTransition(() => {
-          router.refresh();
-        });
       } else {
         setError('Failed to delete note');
       }
@@ -65,11 +66,6 @@ export default function NoteList({ initialNotes, notebookId }: NoteListProps) {
             )
           );
           setEditingNote(null);
-
-          // Then refresh the data
-          startTransition(() => {
-            router.refresh();
-          });
         } else {
           setError('Failed to update note');
         }
@@ -85,12 +81,6 @@ export default function NoteList({ initialNotes, notebookId }: NoteListProps) {
       {error && (
         <div className='bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4'>
           {error}
-        </div>
-      )}
-
-      {isPending && (
-        <div className='bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded mb-4'>
-          Updating...
         </div>
       )}
 

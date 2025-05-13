@@ -9,9 +9,13 @@ import { Note } from '@/lib/types';
 
 interface CreateNoteButtonProps {
   notebookId: string;
+  onNoteCreated?: (note: Note) => void;
 }
 
-export function CreateNoteButton({ notebookId }: CreateNoteButtonProps) {
+export function CreateNoteButton({
+  notebookId,
+  onNoteCreated,
+}: CreateNoteButtonProps) {
   const [isCreating, setIsCreating] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
@@ -27,11 +31,13 @@ export function CreateNoteButton({ notebookId }: CreateNoteButtonProps) {
         // Close the editor
         setIsCreating(false);
 
+        // Update the parent component's state with the new note
+        if (onNoteCreated) {
+          onNoteCreated(newNote);
+        }
+
         // The server action now handles path revalidation
-        // Still use startTransition for better UX during refresh
-        startTransition(() => {
-          router.refresh();
-        });
+        // We no longer need to refresh the page as the state is updated directly
       } else {
         setError('Failed to create note');
       }
@@ -49,7 +55,7 @@ export function CreateNoteButton({ notebookId }: CreateNoteButtonProps) {
         disabled={isPending}
       >
         <IconPlus size={20} />
-        {isPending ? 'Creating...' : 'Create Note'}
+        Create Note
       </button>
 
       {isCreating && (
@@ -74,12 +80,6 @@ export function CreateNoteButton({ notebookId }: CreateNoteButtonProps) {
           >
             ×
           </button>
-        </div>
-      )}
-
-      {isPending && (
-        <div className='fixed top-4 right-4 bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded shadow-md z-50'>
-          Refreshing data...
         </div>
       )}
     </>
