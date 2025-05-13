@@ -23,13 +23,22 @@ export function NoteEditor({
   const [content, setContent] = useState(initialContent);
   const [isPreview, setIsPreview] = useState(false);
   const [error, setError] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
 
-  function handleSave() {
+  async function handleSave() {
     if (!title.trim()) {
       setError('Title is required');
       return;
     }
-    onSave(title, content);
+
+    setIsSaving(true);
+    try {
+      await onSave(title, content);
+    } catch (error) {
+      setError('Failed to save note. Please try again.');
+    } finally {
+      setIsSaving(false);
+    }
   }
 
   const togglePreview = () => setIsPreview(!isPreview);
@@ -67,6 +76,7 @@ export function NoteEditor({
           onClose={onClose}
           onSave={handleSave}
           isEditing={isEditing}
+          isSaving={isSaving}
         />
       </div>
     </div>

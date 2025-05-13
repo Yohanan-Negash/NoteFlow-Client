@@ -6,6 +6,7 @@ import {
   IconX,
   IconEdit,
   IconEyeCheck,
+  IconLoader2,
 } from '@tabler/icons-react';
 
 interface NoteEditorHeaderProps {
@@ -58,6 +59,7 @@ interface NoteEditorFooterProps {
   onClose: () => void;
   onSave: () => void;
   isEditing: boolean;
+  isSaving?: boolean;
 }
 
 export function NoteEditorFooter({
@@ -65,6 +67,7 @@ export function NoteEditorFooter({
   onClose,
   onSave,
   isEditing,
+  isSaving = false,
 }: NoteEditorFooterProps) {
   return (
     <div className='p-4 sm:p-6 border-t border-gray-100 flex justify-between items-center'>
@@ -97,15 +100,26 @@ export function NoteEditorFooter({
           onClick={onClose}
           className='px-3 py-1.5 sm:px-4 sm:py-2 text-sm rounded-full border border-gray-200 bg-white text-gray-700 hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-200'
           type='button'
+          disabled={isSaving}
         >
           Cancel
         </button>
         <button
           onClick={onSave}
-          className='px-3 py-1.5 sm:px-4 sm:py-2 text-sm rounded-full border border-blue-600 bg-blue-600 text-white font-medium hover:bg-white hover:text-blue-700 hover:border-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-200'
+          className='px-3 py-1.5 sm:px-4 sm:py-2 text-sm rounded-full border border-blue-600 bg-blue-600 text-white font-medium hover:bg-white hover:text-blue-700 hover:border-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-200 flex items-center gap-1.5'
           type='button'
+          disabled={isSaving}
         >
-          {isEditing ? 'Save Changes' : 'Create Note'}
+          {isSaving ? (
+            <>
+              <IconLoader2 size={16} className='animate-spin' />
+              <span>{isEditing ? 'Saving...' : 'Creating...'}</span>
+            </>
+          ) : isEditing ? (
+            'Save Changes'
+          ) : (
+            'Create Note'
+          )}
         </button>
       </div>
     </div>

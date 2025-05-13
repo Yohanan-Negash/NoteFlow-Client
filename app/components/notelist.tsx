@@ -1,16 +1,11 @@
 'use client';
 
-import { Note } from './note';
-
-interface NoteData {
-  id: number;
-  title: string;
-  content: string;
-}
+import { Note as NoteComponent } from './note';
+import { Note } from '@/lib/types';
 
 interface NoteListProps {
-  notes: NoteData[];
-  onUpdate: (id: number, title: string, content: string) => void;
+  notes: Note[];
+  onUpdate: (note: Note) => void;
   onDelete: (id: number) => void;
 }
 
@@ -18,12 +13,12 @@ export function NoteList({ notes, onUpdate, onDelete }: NoteListProps) {
   return (
     <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full'>
       {notes.map((note) => (
-        <Note
+        <NoteComponent
           key={note.id}
           id={note.id}
           title={note.title}
           content={note.content}
-          onUpdate={(title, content) => onUpdate(note.id, title, content)}
+          onUpdate={(editedNote) => onUpdate({ ...note, ...editedNote })}
           onDelete={() => onDelete(note.id)}
         />
       ))}
