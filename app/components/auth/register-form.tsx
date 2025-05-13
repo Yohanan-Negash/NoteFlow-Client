@@ -51,6 +51,7 @@ export function RegisterForm() {
           <Input
             id='email_address'
             name='email_address'
+            className='text-black'
             type='email'
             placeholder='Email address'
             required
