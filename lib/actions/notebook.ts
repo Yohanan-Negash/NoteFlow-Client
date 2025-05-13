@@ -17,6 +17,7 @@ export async function getNotebooks(): Promise<Notebook[]> {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      credentials: 'include',
     });
 
     const data = await response.json();
@@ -43,6 +44,7 @@ export async function createNotebook(name: string) {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
     });
 
     if (!response.ok) {
@@ -72,6 +74,7 @@ export async function deleteNotebook(id: string) {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      credentials: 'include',
     });
 
     if (!response.ok) {
@@ -99,6 +102,7 @@ export async function getNotebook(id: string) {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      credentials: 'include',
     });
 
     if (!response.ok) {
@@ -130,6 +134,7 @@ export async function updateNotebook(id: string, name: string) {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
     });
 
     if (!response.ok) {
@@ -144,20 +149,18 @@ export async function updateNotebook(id: string, name: string) {
     return null;
   }
 }
-
 export async function getNotebookNotes(id: string) {
   const token = await getAuthToken();
-
   if (!token) {
     console.error('No token found in getNotebookNotes');
     return [];
   }
-
   try {
     const response = await fetch(`${API_URL}/api/v1/notebooks/${id}/notes`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      credentials: 'include',
     });
 
     if (!response.ok) {
@@ -171,4 +174,4 @@ export async function getNotebookNotes(id: string) {
     console.error('Error getting notebook notes:', error);
     return [];
   }
-     
+}

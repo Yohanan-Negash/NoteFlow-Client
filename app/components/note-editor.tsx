@@ -34,7 +34,7 @@ export function NoteEditor({
     setIsSaving(true);
     try {
       await onSave(title, content);
-    } catch (error) {
+    } catch {
       setError('Failed to save note. Please try again.');
     } finally {
       setIsSaving(false);

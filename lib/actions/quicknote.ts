@@ -4,12 +4,14 @@ import { getAuthToken } from './auth';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
-export async function getQuickNotes(): Promise<QuickNote[]> {
+export async function getQuickNotes(): Promise<
+  QuickNote[] | { error: string }
+> {
   const token = await getAuthToken();
 
   if (!token) {
     console.error('No token found in getQuickNotes');
-    return [];
+    return { error: 'Authentication failed' };
   }
 
   try {
@@ -17,6 +19,7 @@ export async function getQuickNotes(): Promise<QuickNote[]> {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      credentials: 'include',
     });
     const data = await response.json();
     return data;
@@ -26,7 +29,9 @@ export async function getQuickNotes(): Promise<QuickNote[]> {
   }
 }
 
-export async function createQuickNote(content: string) {
+export async function createQuickNote(
+  content: string
+): Promise<QuickNote[] | { error: string }> {
   const token = await getAuthToken();
 
   if (!token) {
@@ -42,6 +47,7 @@ export async function createQuickNote(content: string) {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
     });
     const data = await response.json();
     return data;

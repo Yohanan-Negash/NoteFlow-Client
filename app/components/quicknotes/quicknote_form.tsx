@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { IconPlus } from '@tabler/icons-react';
+import { QuickNote } from '@/lib/types';
 
 export function TimeRemaining({ expiresAt }: { expiresAt: string }) {
   const [timeLeft, setTimeLeft] = useState<string>('');
@@ -33,7 +34,14 @@ export function TimeRemaining({ expiresAt }: { expiresAt: string }) {
 }
 
 interface QuickNoteFormProps {
-  createAction: (content: string) => Promise<any>;
+  createAction: (content: string) => Promise<QuickNote[] | { error: string }>;
+}
+
+// Type guard function to check if the result has an error property
+function isErrorResult(
+  result: QuickNote[] | { error: string }
+): result is { error: string } {
+  return 'error' in result;
 }
 
 export function QuickNoteForm({ createAction }: QuickNoteFormProps) {
@@ -56,7 +64,7 @@ export function QuickNoteForm({ createAction }: QuickNoteFormProps) {
     try {
       const result = await createAction(content);
 
-      if (result.error) {
+      if (isErrorResult(result)) {
         setError(result.error);
       } else {
         setContent('');
@@ -64,7 +72,7 @@ export function QuickNoteForm({ createAction }: QuickNoteFormProps) {
         // Refresh the page to show the new note
         window.location.reload();
       }
-    } catch (err) {
+    } catch {
       setError('Failed to create note');
     } finally {
       setIsLoading(false);

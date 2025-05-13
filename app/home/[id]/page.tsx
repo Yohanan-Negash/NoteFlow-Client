@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { getNotebook } from '@/lib/actions/notebook';
 import { getNotes } from '@/lib/actions/notes';
-import { useParams, notFound, useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import NoteList from './note-list';
 import { CreateNoteButton } from './create-note-button';
 import { LoadingSpinner } from '@/app/components/ui/loading-spinner';

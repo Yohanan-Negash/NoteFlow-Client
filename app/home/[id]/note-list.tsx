@@ -1,11 +1,10 @@
 'use client';
 
-import { useState, useTransition, Dispatch, SetStateAction } from 'react';
+import { useState, Dispatch, SetStateAction } from 'react';
 import { Note } from '@/lib/types';
 import { deleteNote, updateNote } from '@/lib/actions/notes';
 import { NoteList as NoteListComponent } from '@/app/components/notelist';
 import { NoteEditor } from '@/app/components/note-editor';
-import { useRouter } from 'next/navigation';
 
 interface NoteListProps {
   notes: Note[];
@@ -18,12 +17,9 @@ export default function NoteList({
   notes,
   setNotes,
   notebookId,
-  initialNotes = [],
 }: NoteListProps) {
   const [editingNote, setEditingNote] = useState<Note | null>(null);
   const [error, setError] = useState('');
-  const router = useRouter();
-  const [isPending, startTransition] = useTransition();
 
   async function handleDeleteNote(id: number) {
     try {

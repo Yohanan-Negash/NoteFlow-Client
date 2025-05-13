@@ -9,15 +9,17 @@ import { Button } from '@/app/components/ui/button';
 import { Input } from '@/app/components/ui/input';
 
 interface RegisterState {
-  success?: boolean;
+  success: boolean;
   error?: string;
   redirectTo?: string;
 }
 
-const initialState: RegisterState = {};
+const initialState: RegisterState = {
+  success: false,
+};
 
 function SubmitButton() {
-  const { pending, data } = useFormStatus();
+  const { pending } = useFormStatus();
 
   return (
     <Button

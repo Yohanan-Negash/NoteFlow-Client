@@ -12,12 +12,22 @@ const COOKIE_OPTIONS = {
   secure: process.env.NODE_ENV === 'production',
   maxAge: 60 * 60 * 24 * 7, // 7 days
   path: '/',
-  sameSite: 'lax',
+  sameSite: 'lax' as const,
 };
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
-export async function login(prevState: any, formData: FormData) {
+// Define proper types for auth actions
+interface AuthState {
+  success: boolean;
+  error?: string;
+  redirectTo?: string;
+}
+
+export async function login(
+  prevState: AuthState | undefined,
+  formData: FormData
+): Promise<AuthState> {
   const email_address = formData.get('email_address') as string;
   const password = formData.get('password') as string;
 
@@ -35,6 +45,7 @@ export async function login(prevState: any, formData: FormData) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ email_address, password }),
+      credentials: 'include',
     });
 
     const data = await response.json();
@@ -76,7 +87,10 @@ export async function login(prevState: any, formData: FormData) {
   }
 }
 
-export async function register(prevState: any, formData: FormData) {
+export async function register(
+  prevState: AuthState | undefined,
+  formData: FormData
+): Promise<AuthState> {
   const email_address = formData.get('email_address') as string;
   const password = formData.get('password') as string;
   const password_confirmation = formData.get('password_confirmation') as string;
@@ -102,6 +116,7 @@ export async function register(prevState: any, formData: FormData) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ email_address, password, password_confirmation }),
+      credentials: 'include',
     });
 
     const data = await response.json();
@@ -148,7 +163,7 @@ export async function register(prevState: any, formData: FormData) {
 }
 
 export async function logout() {
-  const token = getAuthToken();
+  const token = await getAuthToken();
 
   if (token) {
     try {
@@ -157,6 +172,7 @@ export async function logout() {
         headers: {
           Authorization: token,
         },
+        credentials: 'include',
       });
     } catch (error) {
       console.error('Logout error:', error);

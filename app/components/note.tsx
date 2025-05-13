@@ -16,7 +16,7 @@ interface NoteProps {
   }) => Promise<void> | void;
 }
 
-export function Note({ id, title, content, onDelete, onUpdate }: NoteProps) {
+export function Note({ title, content, onDelete, onUpdate }: NoteProps) {
   const [showActions, setShowActions] = useState(false);
   const [confirm, setConfirm] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -30,7 +30,7 @@ export function Note({ id, title, content, onDelete, onUpdate }: NoteProps) {
     setIsDeleting(true);
     try {
       await onDelete();
-    } catch (err) {
+    } catch {
       setError('Failed to delete note.');
     } finally {
       setIsDeleting(false);

@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { Notebook as NotebookComponent } from './notebook';
 import { IconPlus } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import {
   getNotebooks,
   createNotebook,

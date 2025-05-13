@@ -1,7 +1,11 @@
 import { QuickNote } from '@/lib/types';
 import { TimeRemaining } from './quicknote_form';
 
-export default function QuickNotesCard({ quicknote }: QuickNote) {
+interface QuickNotesCardProps {
+  quicknote: QuickNote;
+}
+
+export default function QuickNotesCard({ quicknote }: QuickNotesCardProps) {
   return (
     <div className='border border-blue-100 rounded-xl bg-white shadow-sm p-6 flex flex-col gap-2'>
       <div className='whitespace-pre-wrap text-gray-800 text-base'>

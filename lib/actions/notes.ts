@@ -1,6 +1,5 @@
 'use server';
 
-import { Note } from '../types';
 import { getAuthToken } from './auth';
 import { revalidatePath } from 'next/cache';
 
@@ -22,6 +21,7 @@ export async function getNotes(notebookId: string) {
         headers: {
           Authorization: `Bearer ${token}`,
         },
+        credentials: 'include',
       }
     );
 
@@ -60,6 +60,7 @@ export async function createNote(
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ note: { title, content } }),
+        credentials: 'include',
       }
     );
 
@@ -97,6 +98,7 @@ export async function getNote(notebookId: string, noteId: string) {
         headers: {
           Authorization: `Bearer ${token}`,
         },
+        credentials: 'include',
       }
     );
 
@@ -136,6 +138,7 @@ export async function updateNote(
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ note: { title, content } }),
+        credentials: 'include',
       }
     );
 
@@ -172,6 +175,7 @@ export async function deleteNote(notebookId: string, noteId: string) {
         headers: {
           Authorization: `Bearer ${token}`,
         },
+        credentials: 'include',
       }
     );
 

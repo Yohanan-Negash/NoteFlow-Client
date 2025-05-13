@@ -1,7 +1,11 @@
 import { QuickNote } from '@/lib/types';
 import QuickNotesCard from './quicknotes_card';
 
-export default function QuickNotesList({ quick_notes }: QuickNote[]) {
+interface QuickNotesListProps {
+  quick_notes: QuickNote[];
+}
+
+export default function QuickNotesList({ quick_notes }: QuickNotesListProps) {
   if (quick_notes.length === 0) {
     return (
       <div className='flex flex-col items-center justify-center py-24 text-gray-400'>

@@ -4,7 +4,6 @@ import {
   IconPlus,
   IconNotebook,
   IconUser,
-  IconMail,
   IconSettings,
   IconLogout,
   IconSun,
@@ -66,7 +65,9 @@ export default function Navbar() {
             <div className='absolute left-1/2 top-14 -translate-x-1/2 sm:left-0 sm:top-14 sm:translate-x-0 w-[90vw] max-w-xs sm:w-56 sm:max-w-none bg-white rounded-xl shadow-xl border border-blue-100 p-4 z-50 flex flex-col gap-3 min-w-[200px]'>
               <div className='flex items-center gap-3 text-blue-700 max-w-full font-medium'>
                 <span className='truncate'>
-                  {user?.email_address.length > 0 ? user.email_address : 'User'}
+                  {user?.email_address && user.email_address.length > 0
+                    ? user.email_address
+                    : 'User'}
                 </span>
               </div>
               <button

@@ -9,12 +9,14 @@ import { Button } from '@/app/components/ui/button';
 import { Input } from '@/app/components/ui/input';
 
 interface LoginState {
-  success?: boolean;
+  success: boolean;
   error?: string;
   redirectTo?: string;
 }
 
-const initialState: LoginState = {};
+const initialState: LoginState = {
+  success: false,
+};
 
 function SubmitButton() {
   const { pending, data } = useFormStatus();

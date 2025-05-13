@@ -1,10 +1,9 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useState } from 'react';
 import { IconPlus } from '@tabler/icons-react';
 import { NoteEditor } from '@/app/components/note-editor';
 import { createNote } from '@/lib/actions/notes';
-import { useRouter } from 'next/navigation';
 import { Note } from '@/lib/types';
 
 interface CreateNoteButtonProps {
@@ -17,12 +16,12 @@ export function CreateNoteButton({
   onNoteCreated,
 }: CreateNoteButtonProps) {
   const [isCreating, setIsCreating] = useState(false);
+  const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState('');
-  const router = useRouter();
-  const [isPending, startTransition] = useTransition();
 
   async function handleSaveNote(title: string, content: string) {
     setError('');
+    setIsPending(true);
 
     try {
       const newNote = await createNote(notebookId, title, content);
@@ -44,6 +43,8 @@ export function CreateNoteButton({
     } catch (err) {
       console.error('Error creating note:', err);
       setError('Failed to create note');
+    } finally {
+      setIsPending(false);
     }
   }
 

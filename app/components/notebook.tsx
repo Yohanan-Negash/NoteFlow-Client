@@ -11,13 +11,7 @@ interface NotebookProps {
   onClick?: () => void;
 }
 
-export function Notebook({
-  id,
-  name,
-  onDelete,
-  onUpdate,
-  onClick,
-}: NotebookProps) {
+export function Notebook({ name, onDelete, onUpdate, onClick }: NotebookProps) {
   const [showDelete, setShowDelete] = useState(false);
   const [confirm, setConfirm] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
@@ -38,7 +32,7 @@ export function Notebook({
     try {
       if (onUpdate) await onUpdate(editName);
       setShowEdit(false);
-    } catch (err) {
+    } catch {
       setEditError('Failed to update.');
     } finally {
       setIsUpdating(false);
@@ -50,7 +44,7 @@ export function Notebook({
     setIsDeleting(true);
     try {
       await onDelete();
-    } catch (err) {
+    } catch {
       setDeleteError('Failed to delete.');
     } finally {
       setIsDeleting(false);
