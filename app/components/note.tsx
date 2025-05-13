@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { IconTrash, IconPencil } from '@tabler/icons-react';
+import { IconTrash, IconEye } from '@tabler/icons-react';
 import { NoteEditor } from './note-editor';
 import { useRouter } from 'next/navigation';
 
@@ -110,10 +110,10 @@ export function Note({ title, content, onDelete, onUpdate }: NoteProps) {
             <button
               className='absolute top-3 left-3 p-2 rounded-full bg-white border border-blue-100 shadow hover:bg-blue-50 hover:text-blue-600 transition-colors text-blue-700 z-10'
               onClick={handleEditClick}
-              aria-label='Edit note'
+              aria-label='View and edit note'
               disabled={isPending}
             >
-              <IconPencil size={18} />
+              <IconEye size={18} />
             </button>
           </>
         )}

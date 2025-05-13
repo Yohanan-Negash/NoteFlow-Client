@@ -9,6 +9,7 @@ import {
   IconSun,
   IconMoon,
   IconChevronLeft,
+  IconX,
 } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
@@ -39,16 +40,16 @@ export default function Navbar() {
   return (
     <nav className='fixed left-1/2 top-8 z-50 -translate-x-1/2 flex items-center gap-6 bg-white rounded-full shadow-lg px-8 py-3 border border-blue-100'>
       <div className='flex items-center gap-4'>
-        <div className='flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-200 bg-white transition-all duration-150 hover:bg-blue-50 hover:shadow-md hover:scale-105'>
-          <Link href='/home'>
+        <Link href='/home' className='block'>
+          <div className='flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-200 bg-white transition-all duration-150 hover:bg-blue-50 hover:shadow-md hover:scale-105 cursor-pointer'>
             <IconNotebook size={24} stroke={2} className='text-blue-600' />
-          </Link>
-        </div>
-        <div className='flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-200 bg-white transition-all duration-150 hover:bg-blue-50 hover:shadow-md hover:scale-105'>
-          <Link href='/home/quick-note'>
+          </div>
+        </Link>
+        <Link href='/home/quick-note' className='block'>
+          <div className='flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-200 bg-white transition-all duration-150 hover:bg-blue-50 hover:shadow-md hover:scale-105 cursor-pointer'>
             <IconPlus size={24} stroke={2} className='text-blue-600' />
-          </Link>
-        </div>
+          </div>
+        </Link>
         <div className='relative'>
           <button
             className='flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-200 bg-white transition-all duration-150 hover:bg-blue-50 hover:shadow-md hover:scale-105 focus:outline-none'
@@ -56,10 +57,14 @@ export default function Navbar() {
               setShowModal((v) => !v);
               setShowSettings(false);
             }}
-            aria-label='User menu'
+            aria-label={showModal ? 'Close menu' : 'User menu'}
             type='button'
           >
-            <IconUser size={24} stroke={2} className='text-blue-600' />
+            {showModal ? (
+              <IconX size={24} stroke={2} className='text-blue-600' />
+            ) : (
+              <IconUser size={24} stroke={2} className='text-blue-600' />
+            )}
           </button>
           {showModal && !showSettings && (
             <div className='absolute left-1/2 top-14 -translate-x-1/2 sm:left-0 sm:top-14 sm:translate-x-0 w-[90vw] max-w-xs sm:w-56 sm:max-w-none bg-white rounded-xl shadow-xl border border-blue-100 p-4 z-50 flex flex-col gap-3 min-w-[200px]'>

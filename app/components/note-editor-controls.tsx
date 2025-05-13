@@ -1,8 +1,6 @@
 'use client';
 
 import {
-  IconEye,
-  IconEyeOff,
   IconX,
   IconEdit,
   IconEyeCheck,
@@ -34,14 +32,32 @@ export function NoteEditorHeader({
         className='text-xl sm:text-2xl font-bold text-blue-800 bg-transparent border-none focus:outline-none focus:ring-0 p-0 w-full'
       />
       <div className='flex items-center gap-2'>
-        <button
-          onClick={togglePreview}
-          className='p-2 rounded-full border border-transparent hover:border-blue-200 hover:bg-blue-50 transition-colors text-gray-500 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-200'
-          title={isPreview ? 'Edit mode' : 'Preview mode'}
-          type='button'
-        >
-          {isPreview ? <IconEyeOff size={20} /> : <IconEye size={20} />}
-        </button>
+        <div className='flex rounded-full bg-gray-100 p-1'>
+          <button
+            onClick={isPreview ? togglePreview : undefined}
+            className={`px-3 py-1 rounded-full text-xs sm:text-sm font-medium transition-colors ${
+              !isPreview
+                ? 'bg-white text-blue-700 shadow-sm'
+                : 'text-gray-600 hover:text-blue-600'
+            }`}
+            title='Edit mode'
+            type='button'
+          >
+            Edit
+          </button>
+          <button
+            onClick={!isPreview ? togglePreview : undefined}
+            className={`px-3 py-1 rounded-full text-xs sm:text-sm font-medium transition-colors ${
+              isPreview
+                ? 'bg-white text-blue-700 shadow-sm'
+                : 'text-gray-600 hover:text-blue-600'
+            }`}
+            title='Preview mode'
+            type='button'
+          >
+            Preview
+          </button>
+        </div>
         <button
           onClick={onClose}
           className='p-2 rounded-full border border-transparent hover:border-blue-200 hover:bg-blue-50 transition-colors text-gray-500 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-200'
@@ -71,28 +87,9 @@ export function NoteEditorFooter({
 }: NoteEditorFooterProps) {
   return (
     <div className='p-4 sm:p-6 border-t border-gray-100 flex justify-between items-center'>
-      <div className='flex items-center gap-2'>
-        <div
-          className={`
-          flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs sm:text-sm
-          ${
-            isPreview
-              ? 'bg-blue-50 text-blue-700 border border-blue-200'
-              : 'bg-gray-50 text-gray-700 border border-gray-200'
-          }
-        `}
-        >
-          {isPreview ? (
-            <IconEyeCheck size={16} className='text-blue-600' />
-          ) : (
-            <IconEdit size={16} className='text-gray-600' />
-          )}
-          <span className='font-medium'>
-            {isPreview ? 'Preview mode' : 'Edit mode'}
-          </span>
-        </div>
-        <span className='text-xs sm:text-sm text-gray-500 hidden sm:inline'>
-          • Use markdown for formatting
+      <div className='flex items-center'>
+        <span className='text-xs sm:text-sm text-gray-500'>
+          Use markdown for formatting
         </span>
       </div>
       <div className='flex gap-2'>
