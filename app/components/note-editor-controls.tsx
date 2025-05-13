@@ -1,11 +1,6 @@
 'use client';
 
-import {
-  IconX,
-  IconEdit,
-  IconEyeCheck,
-  IconLoader2,
-} from '@tabler/icons-react';
+import { IconX, IconLoader2 } from '@tabler/icons-react';
 
 interface NoteEditorHeaderProps {
   title: string;
@@ -79,7 +74,6 @@ interface NoteEditorFooterProps {
 }
 
 export function NoteEditorFooter({
-  isPreview,
   onClose,
   onSave,
   isEditing,
