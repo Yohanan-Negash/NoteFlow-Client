@@ -69,6 +69,11 @@ export default function Home() {
           </div>
         )}
 
+        <p className='text-orange-600 mt-3'>
+          ⚠️ Password reset feature is not live yet! Make sure to remember your
+          password otherwise your toast.{' '}
+        </p>
+
         {/* <div className='mt-8 text-center text-sm text-gray-500'>
           <p>
             By continuing, you agree to our Terms of Service and Privacy Policy.
