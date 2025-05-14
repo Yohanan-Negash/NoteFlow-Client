@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Button } from './components/ui/button';
 import { LoginForm } from './components/auth/login-form';
 import { RegisterForm } from './components/auth/register-form';
+import { IconAlertTriangle } from '@tabler/icons-react';
 
 export default function Home() {
   const [showSignIn, setShowSignIn] = useState(false);
@@ -69,10 +70,16 @@ export default function Home() {
           </div>
         )}
 
-        <p className='text-orange-600 mt-3'>
-          ⚠️ Password reset feature is not live yet! Make sure to remember your
-          password otherwise your toast.{' '}
-        </p>
+        <div className='mt-4 p-3 bg-orange-50 border border-orange-200 rounded-md flex items-start space-x-2'>
+          <IconAlertTriangle
+            className='text-orange-500 flex-shrink-0 mt-0.5'
+            size={18}
+          />
+          <p className='text-sm text-orange-800'>
+            Password reset feature is not live yet! Make sure to remember your
+            password.
+          </p>
+        </div>
 
         {/* <div className='mt-8 text-center text-sm text-gray-500'>
           <p>

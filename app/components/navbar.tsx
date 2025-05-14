@@ -15,12 +15,15 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { logout, getUser } from '@/lib/actions/auth';
 import { User } from '@/lib/types';
+import { useRouter } from 'next/navigation';
 
 export default function Navbar() {
   const [showModal, setShowModal] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -34,6 +37,19 @@ export default function Navbar() {
     setDarkMode((v) => !v);
     if (typeof window !== 'undefined') {
       document.documentElement.classList.toggle('dark', !darkMode);
+    }
+  }
+
+  async function handleLogout() {
+    try {
+      setIsLoggingOut(true);
+      // Server action doesn't return, it redirects
+      await logout();
+      // If for some reason we get here (we shouldn't), redirect manually
+      router.push('/');
+    } catch (error) {
+      console.error('Logout error:', error);
+      setIsLoggingOut(false);
     }
   }
 
@@ -83,10 +99,23 @@ export default function Navbar() {
                 <IconSettings size={20} />
                 Settings
               </button>
-              <div className='flex items-center gap-3 text-red-500 cursor-pointer hover:text-red-700 transition-colors'>
-                <IconLogout size={20} />
-                <button onClick={logout}>Sign out</button>
-              </div>
+              <button
+                onClick={handleLogout}
+                disabled={isLoggingOut}
+                className='flex items-center gap-3 text-red-500 cursor-pointer hover:text-red-700 transition-colors w-full text-left'
+              >
+                {isLoggingOut ? (
+                  <>
+                    <div className='animate-spin rounded-full h-4 w-4 border-b-2 border-red-500'></div>
+                    <span>Signing out...</span>
+                  </>
+                ) : (
+                  <>
+                    <IconLogout size={20} />
+                    <span>Sign out</span>
+                  </>
+                )}
+              </button>
             </div>
           )}
           {showModal && showSettings && (

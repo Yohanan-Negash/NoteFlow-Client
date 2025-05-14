@@ -3,7 +3,7 @@
 import { useActionState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect } from 'react';
 import { login } from '@/lib/actions/auth';
 import { Button } from '@/app/components/ui/button';
 import { Input } from '@/app/components/ui/input';
@@ -19,42 +19,24 @@ const initialState: LoginState = {
 };
 
 function SubmitButton() {
-  const { pending, data } = useFormStatus();
-  const [showEmail, setShowEmail] = useState(false);
-  const emailRef = useRef<string | null>(null);
-
-  // Show what email is being submitted
-  useEffect(() => {
-    if (pending && data) {
-      emailRef.current = data.get('email_address') as string;
-      setShowEmail(true);
-    } else {
-      // Hide after submission completes
-      const timeout = setTimeout(() => {
-        setShowEmail(false);
-      }, 3000);
-
-      return () => clearTimeout(timeout);
-    }
-  }, [pending, data]);
+  const { pending } = useFormStatus();
 
   return (
-    <div>
-      <Button
-        type='submit'
-        className='w-full mb-2'
-        disabled={pending}
-        aria-disabled={pending}
-      >
-        {pending ? 'Signing in...' : 'Sign in'}
-      </Button>
-
-      {showEmail && emailRef.current && (
-        <div className='text-sm text-blue-600 text-center'>
-          Signing in with {emailRef.current}
+    <Button
+      type='submit'
+      className='w-full mb-2'
+      disabled={pending}
+      aria-disabled={pending}
+    >
+      {pending ? (
+        <div className='flex items-center justify-center gap-2'>
+          <div className='animate-spin rounded-full h-4 w-4 border-b-2 border-white'></div>
+          <span>Signing in</span>
         </div>
+      ) : (
+        'Sign in'
       )}
-    </div>
+    </Button>
   );
 }
 
