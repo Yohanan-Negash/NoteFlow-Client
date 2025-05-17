@@ -1,7 +1,6 @@
 'use client';
 
 import {
-  IconPlus,
   IconNotebook,
   IconUser,
   IconSettings,
@@ -10,6 +9,7 @@ import {
   IconMoon,
   IconChevronLeft,
   IconX,
+  IconClock,
 } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
@@ -63,7 +63,7 @@ export default function Navbar() {
         </Link>
         <Link href='/home/quick-note' className='block'>
           <div className='flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-200 bg-white transition-all duration-150 hover:bg-blue-50 hover:shadow-md hover:scale-105 cursor-pointer'>
-            <IconPlus size={24} stroke={2} className='text-blue-600' />
+            <IconClock size={24} stroke={2} className='text-blue-600' />
           </div>
         </Link>
         <div className='relative'>
