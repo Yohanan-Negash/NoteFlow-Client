@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { IconTrash, IconEye } from '@tabler/icons-react';
+import { IconTrash } from '@tabler/icons-react';
 import { NoteEditor } from './note-editor';
 import { useRouter } from 'next/navigation';
 
@@ -75,13 +75,14 @@ export function Note({ title, content, onDelete, onUpdate }: NoteProps) {
   return (
     <>
       <div
-        className='flex flex-col justify-between border border-blue-100 rounded-xl bg-white shadow-sm p-6 min-h-[220px] transition-transform hover:scale-105 hover:shadow-md group relative'
+        className='flex flex-col justify-between border border-blue-100 rounded-xl bg-white shadow-sm p-6 min-h-[220px] transition-transform hover:scale-105 hover:shadow-md group relative cursor-pointer'
         onMouseEnter={() => setShowActions(true)}
         onMouseLeave={() => {
           if (!confirm) {
             setShowActions(false);
           }
         }}
+        onClick={handleEditClick}
       >
         <div className='flex-1 flex flex-col'>
           <h3 className='text-xl font-bold text-blue-700 mb-2'>{title}</h3>
@@ -106,14 +107,6 @@ export function Note({ title, content, onDelete, onUpdate }: NoteProps) {
               ) : (
                 <IconTrash size={18} />
               )}
-            </button>
-            <button
-              className='absolute top-3 left-3 p-2 rounded-full bg-white border border-blue-100 shadow hover:bg-blue-50 hover:text-blue-600 transition-colors text-blue-700 z-10'
-              onClick={handleEditClick}
-              aria-label='View and edit note'
-              disabled={isPending}
-            >
-              <IconEye size={18} />
             </button>
           </>
         )}
