@@ -14,9 +14,9 @@ const markdownStyles = `
   .markdown-preview h4, 
   .markdown-preview h5, 
   .markdown-preview h6 {
-    line-height: 1.2;
-    margin-top: 0.2rem;
-    margin-bottom: 0;
+    line-height: 1;
+    margin-top: 1.2rem;
+    margin-bottom: 1rem;
     color: #1e40af;
   }
 
@@ -179,14 +179,15 @@ export function MarkdownPreview({ content }: MarkdownPreviewProps) {
 
     let processedContent = processCodeBlocks(content);
     processedContent = fixItalics(processedContent);
+    processedContent = fixStrikethrough(processedContent);
 
     // Handle multi-paragraph content
     const html = processedContent
       .split('\n')
       .map((line) => (line.trim() ? snarkdown(line) : ''))
       .join('\n')
-      .replace(/\n\n+/g, '</p><p>')
-      .replace(/\n/g, '<br>');
+      .replace(/\n\n+/g, '</p><p>');
+    // .replace(/\n/g, '<br>');
 
     setRenderedHtml(`<style>${markdownStyles}</style><div class="markdown-preview">
       <p>${html}</p>
@@ -231,9 +232,12 @@ function processCodeBlocks(content: string): string {
 
 // Fix italics to work with underscores
 function fixItalics(content: string): string {
-  // Replace __text__ with _text_ for italics
-  // This is because snarkdown treats __ as bold instead of italics
   return content.replace(/__(.*?)__/g, '_$1_');
+}
+
+// Fix strikethrough markers (--text--) to HTML del tags
+function fixStrikethrough(content: string): string {
+  return content.replace(/--(.*?)--/g, '<del>$1</del>');
 }
 
 // Escape HTML to prevent XSS in code blocks

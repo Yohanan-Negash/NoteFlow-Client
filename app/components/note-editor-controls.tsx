@@ -24,7 +24,7 @@ export function NoteEditorHeader({
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         placeholder='Note title'
-        className='text-xl sm:text-2xl font-bold text-blue-800 bg-transparent border-none focus:outline-none focus:ring-0 p-0 w-full'
+        className='text-xl sm:text-2xl font-bold text-blue-700 bg-transparent border-none focus:outline-none focus:ring-0 p-0 w-full'
       />
       <div className='flex items-center gap-2'>
         <div className='flex rounded-full bg-gray-100 p-1'>
@@ -33,7 +33,7 @@ export function NoteEditorHeader({
             className={`px-3 py-1 rounded-full text-xs sm:text-sm font-medium transition-colors ${
               !isPreview
                 ? 'bg-white text-blue-700 shadow-sm'
-                : 'text-gray-600 hover:text-blue-600'
+                : 'text-gray-500 hover:text-blue-600'
             }`}
             title='Edit mode'
             type='button'
@@ -45,7 +45,7 @@ export function NoteEditorHeader({
             className={`px-3 py-1 rounded-full text-xs sm:text-sm font-medium transition-colors ${
               isPreview
                 ? 'bg-white text-blue-700 shadow-sm'
-                : 'text-gray-600 hover:text-blue-600'
+                : 'text-gray-500 hover:text-blue-600'
             }`}
             title='Preview mode'
             type='button'

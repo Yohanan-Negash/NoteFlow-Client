@@ -62,7 +62,7 @@ export function NoteEditor({
               value={content}
               onChange={(e) => setContent(e.target.value)}
               placeholder='Start writing in markdown...'
-              className='w-full h-full min-h-[200px] sm:min-h-[300px] text-base text-gray-800 bg-transparent border-none focus:outline-none focus:ring-0 p-0 resize-none'
+              className='w-full h-full min-h-[200px] sm:min-h-[300px] text-base text-gray-800 bg-transparent border-none focus:outline-none focus:ring-0 p-0 resize-none leading-relaxed'
             />
           )}
         </div>
