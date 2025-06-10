@@ -75,7 +75,7 @@ export function Note({ title, content, onDelete, onUpdate }: NoteProps) {
   return (
     <>
       <div
-        className='flex flex-col justify-between border border-blue-100 rounded-xl bg-white shadow-sm p-6 min-h-[220px] transition-transform hover:scale-105 hover:shadow-md group relative cursor-pointer'
+        className='flex flex-col justify-between border border-blue-100 rounded-xl bg-primary shadow-sm p-6 min-h-[220px] transition-transform hover:scale-105 hover:shadow-md group relative cursor-pointer'
         onMouseEnter={() => setShowActions(true)}
         onMouseLeave={() => {
           if (!confirm) {
@@ -85,15 +85,15 @@ export function Note({ title, content, onDelete, onUpdate }: NoteProps) {
         onClick={handleEditClick}
       >
         <div className='flex-1 flex flex-col'>
-          <h3 className='text-xl font-bold text-blue-700 mb-2'>{title}</h3>
-          <div className='text-gray-600 line-clamp-3'>{content}</div>
+          <h3 className='text-xl font-bold text-secondary mb-2'>{title}</h3>
+          <div className='text-foreground line-clamp-3'>{content}</div>
         </div>
-        <div className='text-xs text-gray-400 text-center mt-2'>Note</div>
+        <div className='text-xs text-foreground text-center mt-2'>Note</div>
 
         {showActions && !confirm && (
           <>
             <button
-              className='absolute top-3 right-3 p-2 rounded-full bg-white border border-blue-100 shadow hover:bg-red-50 hover:text-red-600 transition-colors text-red-700 z-10'
+              className='absolute top-3 right-3 p-2 rounded-full bg-primary border border-blue-100 shadow hover:bg-red-50 hover:text-red-600 transition-colors text-red-700 z-10'
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -112,8 +112,8 @@ export function Note({ title, content, onDelete, onUpdate }: NoteProps) {
         )}
 
         {confirm && (
-          <div className='absolute top-3 right-3 bg-white border border-blue-100 rounded shadow p-2 flex flex-col items-center gap-1 z-20'>
-            <span className='text-xs text-gray-700 mb-1'>Delete?</span>
+          <div className='absolute top-3 right-3 bg-primary border border-blue-100 rounded shadow p-2 flex flex-col items-center gap-1 z-20'>
+            <span className='text-xs text-foreground mb-1'>Delete?</span>
             <div className='flex gap-1'>
               <button
                 className='px-2 py-1 text-xs rounded bg-red-600 text-white hover:bg-red-700'
@@ -127,7 +127,7 @@ export function Note({ title, content, onDelete, onUpdate }: NoteProps) {
                 {isDeleting ? 'Deleting...' : 'Yes'}
               </button>
               <button
-                className='px-2 py-1 text-xs rounded bg-gray-100 text-gray-700 hover:bg-gray-200'
+                className='px-2 py-1 text-xs rounded bg-gray-100 text-foreground hover:bg-gray-200'
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();

@@ -11,7 +11,7 @@ export default function Home() {
   const [showSignUp, setShowSignUp] = useState(false);
 
   return (
-    <div className='min-h-screen flex flex-col items-center justify-center bg-white'>
+    <div className='min-h-screen flex flex-col items-center justify-center bg-primary'>
       <div className='w-full max-w-md px-8 py-12'>
         <div className='text-center mb-12'>
           <h1 className='text-4xl font-bold text-gray-900 mb-2'>NoteFlow</h1>

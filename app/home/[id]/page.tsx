@@ -77,7 +77,7 @@ export default function NotebookPage() {
   return (
     <div className='max-w-7xl mx-auto py-10 px-4'>
       <div className='flex justify-between items-center mb-8'>
-        <h1 className='text-2xl font-bold text-blue-700'>{notebook.name}</h1>
+        <h1 className='text-2xl font-bold text-secondary'>{notebook.name}</h1>
         <CreateNoteButton notebookId={id} onNoteCreated={handleNoteCreated} />
       </div>
 
