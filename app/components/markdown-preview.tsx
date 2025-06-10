@@ -196,7 +196,7 @@ export function MarkdownPreview({ content }: MarkdownPreviewProps) {
 
   return (
     <div
-      className='text-base text-gray-800'
+      className='text-base text-foreground'
       dangerouslySetInnerHTML={{ __html: renderedHtml }}
     />
   );

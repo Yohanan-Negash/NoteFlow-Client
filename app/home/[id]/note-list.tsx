@@ -81,7 +81,7 @@ export default function NoteList({
       )}
 
       {notes.length === 0 ? (
-        <div className='flex flex-col items-center justify-center py-24 text-gray-400'>
+        <div className='flex flex-col items-center justify-center py-24 text-foreground'>
           <span className='text-lg mb-2'>No notes yet</span>
           <span className='text-sm'>Create a note to get started!</span>
         </div>

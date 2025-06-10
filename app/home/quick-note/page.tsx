@@ -21,11 +21,11 @@ export default async function QuickNotePage() {
   return (
     <>
       <div className='flex justify-between items-center mb-4'>
-        <h2 className='text-2xl font-semibold text-blue-700'>Quick Notes</h2>
+        <h2 className='text-2xl font-semibold text-secondary'>Quick Notes</h2>
         <QuickNoteForm createAction={createQuickNote} />
       </div>
 
-      <p className='text-sm text-gray-500 mb-6'>
+      <p className='text-sm text-foreground mb-6'>
         Quick notes are automatically deleted after 24 hours.
       </p>
 
@@ -39,7 +39,7 @@ export default async function QuickNotePage() {
         fallback={
           <div className='flex flex-col items-center justify-center py-12'>
             <LoadingSpinner />
-            <p className='text-gray-500 mt-4'>Loading quick notes...</p>
+            <p className='text-foreground mt-4'>Loading quick notes...</p>
           </div>
         }
       >

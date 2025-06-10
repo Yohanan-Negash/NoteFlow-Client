@@ -24,7 +24,7 @@ export function NoteEditorHeader({
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         placeholder='Note title'
-        className='text-xl sm:text-2xl font-bold text-blue-700 bg-transparent border-none focus:outline-none focus:ring-0 p-0 w-full'
+        className='text-xl sm:text-2xl font-bold text-secondary bg-transparent border-none focus:outline-none focus:ring-0 p-0 w-full'
       />
       <div className='flex items-center gap-2'>
         <div className='flex rounded-full bg-gray-100 p-1'>
@@ -32,8 +32,8 @@ export function NoteEditorHeader({
             onClick={isPreview ? togglePreview : undefined}
             className={`px-3 py-1 rounded-full text-xs sm:text-sm font-medium transition-colors ${
               !isPreview
-                ? 'bg-white text-blue-700 shadow-sm'
-                : 'text-gray-500 hover:text-blue-600'
+                ? 'bg-primary text-secondary shadow-sm'
+                : 'text-black hover:text-secondary'
             }`}
             title='Edit mode'
             type='button'
@@ -44,8 +44,8 @@ export function NoteEditorHeader({
             onClick={!isPreview ? togglePreview : undefined}
             className={`px-3 py-1 rounded-full text-xs sm:text-sm font-medium transition-colors ${
               isPreview
-                ? 'bg-white text-blue-700 shadow-sm'
-                : 'text-gray-500 hover:text-blue-600'
+                ? 'bg-primary text-secondary shadow-sm'
+                : 'text-black hover:text-secondary'
             }`}
             title='Preview mode'
             type='button'
@@ -55,7 +55,7 @@ export function NoteEditorHeader({
         </div>
         <button
           onClick={onClose}
-          className='p-2 rounded-full border border-transparent hover:border-blue-200 hover:bg-blue-50 transition-colors text-gray-500 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-200'
+          className='p-2 rounded-full border border-transparent hover:border-blue-200 hover:bg-blue-50 transition-colors text-black hover:text-black focus:outline-none focus:ring-2 focus:ring-blue-200'
           type='button'
         >
           <IconX size={20} />
@@ -82,14 +82,14 @@ export function NoteEditorFooter({
   return (
     <div className='p-4 sm:p-6 border-t border-gray-100 flex justify-between items-center'>
       <div className='flex items-center'>
-        <span className='text-xs sm:text-sm text-gray-500'>
+        <span className='text-xs sm:text-sm text-foreground'>
           Use markdown for formatting
         </span>
       </div>
       <div className='flex gap-2'>
         <button
           onClick={onClose}
-          className='px-3 py-1.5 sm:px-4 sm:py-2 text-sm rounded-full border border-gray-200 bg-white text-gray-700 hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-200'
+          className='px-3 py-1.5 sm:px-4 sm:py-2 text-sm rounded-full border border-gray-200 bg-primary text-foreground hover:border-blue-300 hover:bg-blue-50 hover:text-secondary transition-colors focus:outline-none focus:ring-2 focus:ring-blue-200'
           type='button'
           disabled={isSaving}
         >
@@ -97,7 +97,7 @@ export function NoteEditorFooter({
         </button>
         <button
           onClick={onSave}
-          className='px-3 py-1.5 sm:px-4 sm:py-2 text-sm rounded-full border border-blue-600 bg-blue-600 text-white font-medium hover:bg-white hover:text-blue-700 hover:border-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-200 flex items-center gap-1.5'
+          className='px-3 py-1.5 sm:px-4 sm:py-2 text-sm rounded-full border border-blue-600 bg-blue-600 text-white font-medium hover:bg-white hover:text-secondary hover:border-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-200 flex items-center gap-1.5'
           type='button'
           disabled={isSaving}
         >

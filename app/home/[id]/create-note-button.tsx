@@ -52,7 +52,7 @@ export function CreateNoteButton({
     <>
       <button
         onClick={() => setIsCreating(true)}
-        className='flex items-center gap-2 rounded-full border border-blue-200 bg-white text-blue-700 font-semibold px-5 py-2 shadow-sm hover:bg-blue-50 hover:text-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-200'
+        className='flex items-center gap-2 rounded-full border border-blue-200 bg-primary text-secondary font-semibold px-5 py-2 shadow-sm hover:bg-blue-50 hover:text-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-200'
         disabled={isPending}
       >
         <IconPlus size={20} />

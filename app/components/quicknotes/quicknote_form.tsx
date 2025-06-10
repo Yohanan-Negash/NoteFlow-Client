@@ -82,7 +82,7 @@ export function QuickNoteForm({ createAction }: QuickNoteFormProps) {
   return (
     <>
       <button
-        className='flex items-center gap-2 rounded-full border border-blue-200 bg-white text-blue-700 font-semibold px-5 py-2 shadow-sm hover:bg-blue-50 hover:text-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-200'
+        className='flex items-center gap-2 rounded-full border border-blue-200 bg-primary text-secondary font-semibold px-5 py-2 shadow-sm hover:bg-blue-50 hover:text-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-200'
         onClick={() => setShowModal(true)}
       >
         <IconPlus size={20} />
@@ -91,26 +91,26 @@ export function QuickNoteForm({ createAction }: QuickNoteFormProps) {
 
       {showModal && (
         <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/30'>
-          <div className='bg-white rounded-xl shadow-xl p-8 w-full max-w-lg mx-4'>
-            <h3 className='text-lg font-bold text-blue-700 mb-4'>
+          <div className='bg-primary rounded-xl shadow-xl p-8 w-full max-w-lg mx-4'>
+            <h3 className='text-lg font-bold text-secondary mb-4'>
               New Quick Note
             </h3>
             <form onSubmit={handleCreateNote} className='flex flex-col gap-4'>
               <textarea
-                className='border border-blue-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 text-blue-600 min-h-[120px] resize-vertical'
+                className='border border-blue-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 text-secondary min-h-[120px] resize-vertical'
                 placeholder='Write your quick note...'
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 disabled={isLoading}
               />
-              <div className='text-xs text-gray-500'>
+              <div className='text-xs text-foreground'>
                 This note will expire in 24 hours.
               </div>
               {error && <div className='text-red-500 text-sm'>{error}</div>}
               <div className='flex gap-2 justify-end'>
                 <button
                   type='button'
-                  className='px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  className='px-4 py-2 rounded-lg bg-gray-100 text-red-500 hover:bg-gray-200'
                   onClick={() => {
                     setShowModal(false);
                     setError('');

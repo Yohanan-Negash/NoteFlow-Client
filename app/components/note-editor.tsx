@@ -45,7 +45,7 @@ export function NoteEditor({
 
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4 sm:p-6 overflow-auto'>
-      <div className='bg-white rounded-xl shadow-xl w-[92%] md:w-full h-auto min-h-[50vh] max-h-[90vh] sm:max-h-[90vh] sm:h-auto sm:max-w-6xl sm:mx-4 my-auto flex flex-col'>
+      <div className='bg-primary rounded-xl shadow-xl w-[92%] md:w-full h-auto min-h-[50vh] max-h-[90vh] sm:max-h-[90vh] sm:h-auto sm:max-w-6xl sm:mx-4 my-auto flex flex-col'>
         <NoteEditorHeader
           title={title}
           setTitle={setTitle}
@@ -62,7 +62,7 @@ export function NoteEditor({
               value={content}
               onChange={(e) => setContent(e.target.value)}
               placeholder='Start writing in markdown...'
-              className='w-full h-full min-h-[200px] sm:min-h-[300px] text-base text-gray-800 bg-transparent border-none focus:outline-none focus:ring-0 p-0 resize-none leading-relaxed'
+              className='w-full h-full min-h-[200px] sm:min-h-[300px] text-base text-foreground bg-transparent border-none focus:outline-none focus:ring-0 p-0 resize-none leading-relaxed'
             />
           )}
         </div>
